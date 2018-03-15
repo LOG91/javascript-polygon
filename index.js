@@ -14,7 +14,9 @@ function calculateCircle(radius, radius2) {
         let resultArr = [];
         if (!isNumber(radius, radius2)) return '숫자타입만 계산이 가능합니다';
         if (radius > radius2) return '시작 값이 종료 값보다 큽니다';
-        for (var i = radius; i <= radius2; i++) {}
+        for (var i = radius; i <= radius2; i++) {
+            resultArr.push(Math.round(i * i * Math.PI));
+        }
         return '원의 넓이 : ' + resultArr;
     }
 }
@@ -64,16 +66,16 @@ function isUndefined() {
 }
 
 // 다각형 넓이 구하기
-function getPolygon() {
+let getArea = (function () {
     var fnCount = 0;
     let logCallFunc = []; // 함수 호출 로그 배열
     function cal(polygon, ...args) {
+        if (polygon === 'log') return logCallFunc;
         if (polygon !== 'circle' && polygon !== 'rect' && polygon !== 'trapezoid') return '다각형값을 다시 입력하세요.'
         if (args.length < 1) return '최소 한 가지 값이 필요합니다'
         fnCount++;
         console.log('계산이 ' + fnCount + '번 일어났습니다.');
         logCallFunc.push(polygon);
-        console.log(logCallFunc);
         switch (polygon) {
             case 'circle':
                 return calculateCircle(args[0], args[1]);
@@ -84,17 +86,22 @@ function getPolygon() {
             case 'trapezoid':
                 return calculateTrapezoid(args[0], args[1], args[2])
                 break;
+            case 'log':
+                return logCallFunc;
         }
 
     }
     return cal;
+})();
+
+function getReport() {
+    return getArea('log');
 }
 
-
-var getArea = getPolygon();
 
 console.log(getArea('circle', 1, 20));
 console.log(getArea('circle', 3));
 console.log(getArea('circle', 2));
 console.log(getArea('rect', 2, 4));
 console.log(getArea('trapezoid', 1, 4, 2));
+console.log(getReport());
